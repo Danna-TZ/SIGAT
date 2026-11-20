@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIGAT · Docente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="login" class="login">
+  <header class="hdr"><div class="brand"><span class="logo" data-i="grid" data-s="17"></span><div><b>SIGAT</b><small class="pill">ACCESO</small></div></div></header>
+  <div class="login-wrap"><div class="login-box">
+    <div class="role-pill"><span class="ico-circ" data-i="grad" data-s="15"></span>Acceso</div>
+    <div class="card pad-l">
+      <div class="center mb-l">
+        <div class="badge-ico" data-i="grad" data-s="26"></div>
+        <h1 class="h1">Iniciar sesión</h1>
+        <p class="muted">Ingresa tus credenciales para continuar</p>
+      </div>
+      <form id="loginForm" novalidate class="stack">
+        <div class="field">
+          <label>Número de documento <span class="req">*</span></label>
+          <div class="inp-wrap"><span class="lead" data-i="user"></span>
+            <input id="doc" inputmode="numeric" placeholder="Ej: 1023456789" class="has-lead"></div>
+          <span class="err" id="docErr"></span>
+        </div>
+        <div class="field">
+          <label>Contraseña <span class="req">*</span></label>
+          <div class="inp-wrap"><span class="lead" data-i="lock"></span>
+            <input id="pwd" type="password" placeholder="Tu contraseña" class="has-lead has-trail">
+            <button type="button" id="togglePwd" class="trail" aria-label="Mostrar contraseña" data-i="eye" data-s="17"></button></div>
+          <span class="err" id="pwdErr"></span>
+        </div>
+        <div class="right"><button type="button" id="forgot" class="link sm">¿Olvidaste tu contraseña?</button></div>
+        <button class="btn primary full" id="loginBtn"><span data-i="login" data-s="15"></span>Iniciar sesión SIGAT</button>
+      </form>
+    </div>
+    <p class="foot">© 2024 SIGAT — Uso exclusivo de personal autorizado</p>
+  </div></div>
+</section>
+
+<!-- APP -->
+<div id="app" hidden>
+  <header class="hdr">
+    <div class="brand"><span class="logo" data-i="grid" data-s="17"></span><div><b>SIGAT</b><small class="pill">DOCENTE</small></div></div>
+    <nav id="topnav" class="topnav"></nav>
+    <div class="user">
+      <span class="hello">Hola, <b id="uName"></b></span>
+      <span class="avatar" id="uAvatar"></span>
+      <button class="btn-out" id="logout"><span data-i="logout" data-s="13"></span>Salir</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- QR -->
+    <section id="qr" class="view w-sm">
+      <div class="crumb">Dashboard <span data-i="chevr" data-s="12"></span> <b>Reportar Novedad</b></div>
+      <div class="card" id="qrcard" data-s="idle">
+        <h2 class="h2">Reportar Novedad de Sala</h2>
+        <p class="muted mb">Escanea el código QR ubicado en la puerta de tu sala de informática.</p>
+        <div class="qbox" id="qrbox">
+          <div class="s-idle"><span data-i="qr" data-s="58"></span><span>Escanea el QR de tu sala de informática</span></div>
+          <div class="s-scanning"><video id="cam" playsinline muted></video><i class="scanline"></i></div>
+          <div class="s-success"><span data-i="check" data-s="44"></span><b>QR detectado correctamente</b><span>Sala detectada: <b id="salaOk"></b></span></div>
+          <div class="s-error"><span data-i="xc" data-s="44"></span><b>QR no reconocido</b><span>El código no pertenece a ninguna sala registrada.</span></div>
+        </div>
+        <div class="stack-s">
+          <button class="btn primary full on-idle" id="camBtn"><span data-i="camera" data-s="15"></span>Activar cámara</button>
+          <button class="btn ghost full on-idle" id="simBtn">Simular lectura (modo prueba)</button>
+          <button class="btn outline full on-scanning" id="cancelCam">Cancelar</button>
+          <button class="btn primary full on-success" id="toForm"><span data-i="arrow" data-s="15"></span>Continuar a formulario</button>
+          <button class="btn outline full on-success on-error" id="again">Escanear otra sala</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOVEDAD -->
+    <section id="novedad" class="view w-md">
+      <div class="crumb">Dashboard <span data-i="chevr" data-s="12"></span> Reportar <span data-i="chevr" data-s="12"></span> <b>Formulario</b></div>
+      <div class="card">
+        <div class="form-head"><span class="badge-ico sm" data-i="file" data-s="18"></span>
+          <div><h2 class="h3">Formulario de Novedad</h2><p class="muted xs">Sala: <b id="salaHead"></b></p></div></div>
+        <form id="novForm" novalidate class="stack">
+          <div class="field"><label>Sala detectada <span class="req">*</span></label>
+            <input id="salaInp" readonly><span class="hint">Capturada automáticamente desde el QR</span></div>
+          <div class="field"><label>Estado general del salón <span class="req">*</span></label>
+            <select id="estado"><option value="" disabled selected>Selecciona el estado…</option><option>Bueno</option><option>Con novedad</option></select>
+            <span class="err" id="estadoErr"></span></div>
+          <div class="field"><label>Checklist de inventario</label>
+            <div class="checks" id="checks"></div></div>
+          <div class="field"><label>Descripción de la novedad <span class="req">*</span></label>
+            <textarea id="desc" rows="4" placeholder="Detalla el problema encontrado…"></textarea>
+            <span class="err" id="descErr"></span><span class="hint right" id="count">0 caracteres</span></div>
+          <div class="field"><label>Foto evidencia (opcional)</label>
+            <div class="drop" id="drop"><span id="dropIco" data-i="upload" data-s="22"></span>
+              <p id="dropTxt"><b>Arrastra o haz clic aquí</b></p><p class="hint" id="dropSub">JPG, PNG · Máx. 5 MB</p></div>
+            <input type="file" id="file" accept="image/jpeg,image/png" hidden>
+            <span class="err" id="fotoErr"></span></div>
+          <button class="btn primary full"><span data-i="send" data-s="15"></span>Enviar novedad SIGAT</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- NOTAS -->
+    <section id="notas" class="view w-xl">
+      <h1 class="h1">Gestión de Notas</h1><p class="muted mb" id="nCount"></p>
+      <div class="card pad-s mb"><div class="filters">
+        <input id="search" placeholder="Buscar por nombre o documento…"><div class="chips" id="chips"></div></div></div>
+      <div class="card nopad"><div class="scroll"><table>
+        <thead><tr><th>Estudiante</th><th>Documento</th><th>Curso</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>Promedio</th><th>Acciones</th></tr></thead>
+        <tbody id="notasBody"></tbody></table></div></div>
+    </section>
+
+    <!-- HISTORIAL -->
+    <section id="historial" class="view w-lg">
+      <div class="row-b mb"><h1 class="h1 m0">Historial de Reportes</h1>
+        <button class="btn primary sm" data-go="qr"><span data-i="qr" data-s="13"></span>Nuevo reporte</button></div>
+      <div class="card nopad"><div class="scroll"><table>
+        <thead><tr><th>Fecha / Hora</th><th>Sala</th><th>Estado</th><th>Descripción</th><th>Foto</th><th></th></tr></thead>
+        <tbody id="histBody"></tbody></table></div></div>
+    </section>
+
+    <!-- HORARIO -->
+    <section id="horario" class="view w-xl">
+      <h1 class="h1 mb">Horario Semanal de Salas</h1>
+      <div class="card nopad only-d"><div class="scroll"><table class="sched">
+        <thead id="hHead"></thead><tbody id="hBody"></tbody></table></div></div>
+      <div class="only-m stack" id="hMobile"></div>
+    </section>
+  </main>
+
+  <nav class="bnav" id="botnav"></nav>
+</div>
+
+<div id="modal" class="modal" hidden><div class="card" id="modalBox"></div></div>
+<div id="toast" class="toast" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
