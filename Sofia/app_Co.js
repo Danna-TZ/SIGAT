@@ -259,3 +259,5 @@ document.addEventListener('DOMContentLoaded', () => {
   zona.addEventListener('drop', (e) => cargarArchivo(e.dataTransfer.files[0]));
   $('#btnSalir').addEventListener('click', () => { if (confirm('¿Deseas cerrar sesión?')) location.hash = '#historial'; });
 });
+
+// Coordinador commit
