@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SIGAT: portal del coordinador para reportes, novedades y matrículas.">
+  <title>SIGAT · Portal del coordinador</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="styles_Co.css" rel="stylesheet">
+</head>
+<body>
+  <a class="visually-hidden-focusable" href="#contenido">Saltar al contenido</a>
+  <header>
+    <nav class="navbar navbar-dark sigat-nav px-3" aria-label="Principal">
+      <div class="d-flex align-items-center gap-2">
+        <span class="logo-box" aria-hidden="true"><i class="bi bi-grid"></i></span>
+        <div class="lh-1"><strong class="d-block">SIGAT</strong><span class="badge rol-badge">COORDINADOR</span></div>
+      </div>
+      <ul class="nav d-none d-md-flex" id="navSuperior">
+        <li class="nav-item"><a class="nav-link" href="#reportar"><i class="bi bi-qr-code-scan"></i> Reportar</a></li>
+        <li class="nav-item"><a class="nav-link" href="#notas"><i class="bi bi-book"></i> Notas</a></li>
+        <li class="nav-item"><a class="nav-link" href="#historial"><i class="bi bi-clipboard-check"></i> Historial</a></li>
+        <li class="nav-item"><a class="nav-link" href="#horario"><i class="bi bi-calendar3"></i> Horario</a></li>
+        <li class="nav-item"><a class="nav-link" href="#novedades"><i class="bi bi-exclamation-triangle"></i> Novedades</a></li>
+        <li class="nav-item"><a class="nav-link" href="#matricula"><i class="bi bi-person-plus"></i> Matrícula</a></li>
+      </ul>
+      <div class="d-flex align-items-center gap-2 text-white small">
+        <span class="d-none d-sm-inline">Hola, <strong>Coord.</strong></span>
+        <span class="avatar-sm" aria-hidden="true">CO</span>
+        <button type="button" class="btn btn-sm btn-outline-light" id="btnSalir"><i class="bi bi-box-arrow-right"></i> Salir</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenido" class="contenedor">
+    <div id="aviso" role="status" aria-live="polite"></div>
+
+    <!-- REPORTAR -->
+    <section id="reportar" data-vista hidden aria-labelledby="tRep">
+      <h1 id="tRep" class="titulo mb-3">Nuevo reporte</h1>
+      <form id="formReporte" class="panel" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6"><label class="form-label" for="repSala">Sala</label>
+            <select class="form-select" id="repSala" required></select></div>
+          <div class="col-md-6"><label class="form-label" for="repEstado">Estado</label>
+            <select class="form-select" id="repEstado"><option>Bueno</option><option>Con novedad</option></select></div>
+          <div class="col-12"><label class="form-label" for="repDesc">Descripción</label>
+            <textarea class="form-control" id="repDesc" rows="3" placeholder="Describe el estado de la sala"></textarea></div>
+          <div class="col-12"><label class="form-label" for="repFoto">Foto (opcional)</label>
+            <input class="form-control" type="file" id="repFoto" accept="image/*"></div>
+          <div class="col-12"><button class="btn-sigat" type="submit">Enviar reporte</button></div>
+        </div>
+      </form>
+    </section>
+
+    <!-- NOTAS -->
+    <section id="notas" data-vista hidden aria-labelledby="tNot">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 id="tNot" class="titulo mb-0">Notas por curso</h1>
+        <div><label class="visually-hidden" for="filtroCurso">Curso</label><select class="form-select" id="filtroCurso"></select></div>
+      </div>
+      <div class="table-responsive tabla-card"><table class="table mb-0">
+        <caption class="visually-hidden">Notas de estudiantes</caption>
+        <thead><tr><th scope="col">Estudiante</th><th scope="col">Curso</th><th scope="col">P1</th><th scope="col">P2</th><th scope="col">P3</th><th scope="col">P4</th><th scope="col">Promedio</th></tr></thead>
+        <tbody id="tbodyNotas"></tbody></table></div>
+    </section>
+
+    <!-- HISTORIAL -->
+    <section id="historial" data-vista hidden aria-labelledby="tHis">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 id="tHis" class="titulo mb-0">Historial de Reportes</h1>
+        <a class="btn-sigat text-decoration-none" href="#reportar"><i class="bi bi-qr-code-scan"></i> Nuevo reporte</a>
+      </div>
+      <div class="table-responsive tabla-card"><table class="table mb-0">
+        <caption class="visually-hidden">Historial de reportes de salas</caption>
+        <thead><tr><th scope="col">Fecha / Hora</th><th scope="col">Sala</th><th scope="col">Estado</th><th scope="col">Descripción</th><th scope="col">Foto</th><th scope="col"><span class="visually-hidden">Acciones</span></th></tr></thead>
+        <tbody id="tbodyHistorial"></tbody></table></div>
+    </section>
+
+    <!-- HORARIO -->
+    <section id="horario" data-vista hidden aria-labelledby="tHor">
+      <h1 id="tHor" class="titulo mb-3">Horario semanal de salas</h1>
+      <div class="table-responsive tabla-card"><table class="table table-sm mb-0 tabla-horario">
+        <caption class="visually-hidden">Horario por hora y día</caption>
+        <thead id="theadHorario"></thead><tbody id="tbodyHorario"></tbody></table></div>
+    </section>
+
+    <!-- NOVEDADES -->
+    <section id="novedades" data-vista hidden aria-labelledby="tNov">
+      <h1 id="tNov" class="titulo mb-3">Seguimiento de novedades</h1>
+      <div class="row g-3 mb-2 text-center" id="contadores"></div>
+      <div class="filtros" id="filtrosNov" role="group" aria-label="Filtrar por estado"></div>
+      <div class="table-responsive tabla-card"><table class="table mb-0">
+        <caption class="visually-hidden">Novedades y su estado de solución</caption>
+        <thead><tr><th scope="col">Reporte</th><th scope="col">Sala</th><th scope="col">Novedad</th><th scope="col">Estado</th><th scope="col">Seguimiento (¿qué falta?)</th><th scope="col"><span class="visually-hidden">Acciones</span></th></tr></thead>
+        <tbody id="tbodyNovedades"></tbody></table></div>
+    </section>
+
+    <!-- MATRÍCULA -->
+    <section id="matricula" data-vista hidden aria-labelledby="tMat">
+      <h1 id="tMat" class="titulo mb-3">Matrícula de estudiantes</h1>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <form id="formMatricula" class="panel" novalidate>
+            <h2>Matrícula individual</h2>
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label" for="mNombres">Nombres</label><input class="form-control" id="mNombres" required></div>
+              <div class="col-md-6"><label class="form-label" for="mApellidos">Apellidos</label><input class="form-control" id="mApellidos" required></div>
+              <div class="col-md-4"><label class="form-label" for="mTipo">Tipo doc.</label><select class="form-select" id="mTipo"><option>TI</option><option>CC</option><option>RC</option><option>CE</option></select></div>
+              <div class="col-md-8"><label class="form-label" for="mDoc">Documento</label><input class="form-control" id="mDoc" inputmode="numeric" required></div>
+              <div class="col-md-6"><label class="form-label" for="mCurso">Curso</label><select class="form-select" id="mCurso"></select></div>
+              <div class="col-md-6"><label class="form-label" for="mNac">Fecha de nacimiento</label><input class="form-control" type="date" id="mNac" required></div>
+              <div class="col-md-6"><label class="form-label" for="mAcu">Acudiente</label><input class="form-control" id="mAcu" required></div>
+              <div class="col-md-6"><label class="form-label" for="mCorreo">Correo del acudiente</label><input class="form-control" type="email" id="mCorreo" required></div>
+              <div class="col-12"><button class="btn-sigat" type="submit"><i class="bi bi-person-plus"></i> Matricular</button></div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <div class="panel">
+            <h2>Matrícula masiva (archivo CSV)</h2>
+            <label class="zona-carga" id="zonaCarga" for="archivoCsv"><i class="bi bi-cloud-upload"></i>
+              Arrastra tu archivo aquí o haz clic para elegirlo<br><small>Formato .csv · columnas: nombres, apellidos, tipo_doc, documento, curso, acudiente, correo</small></label>
+            <input class="visually-hidden" type="file" id="archivoCsv" accept=".csv,text/csv">
+            <p class="small mt-1 mb-3"><a href="#" id="plantilla"><i class="bi bi-download"></i> Descargar plantilla</a></p>
+            <div id="previewCsv"></div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="panel"><h2>Matriculados recientemente</h2>
+            <div class="table-responsive"><table class="table mb-0"><caption class="visually-hidden">Estudiantes matriculados</caption>
+              <thead><tr><th scope="col">Estudiante</th><th scope="col">Documento</th><th scope="col">Curso</th><th scope="col">Fecha</th></tr></thead>
+              <tbody id="tbodyMatriculados"></tbody></table></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="dlgDetalle" aria-labelledby="dlgDetTitulo"><h2 class="h5" id="dlgDetTitulo">Detalle del reporte</h2><div id="dlgDetCuerpo"></div>
+    <form method="dialog" class="mt-3"><button class="btn btn-sm btn-outline-dark">Cerrar</button></form></dialog>
+
+  <dialog id="dlgNovedad" aria-labelledby="dlgNovTitulo"><h2 class="h5" id="dlgNovTitulo">Actualizar novedad</h2>
+    <form id="formNovedad" class="row g-3 mt-1">
+      <div class="col-12 small" id="dlgNovResumen"></div>
+      <div class="col-12"><label class="form-label" for="novEstado">Estado</label>
+        <select class="form-select" id="novEstado"><option>Pendiente</option><option>En proceso</option><option>Resuelta</option></select></div>
+      <div class="col-12"><label class="form-label" for="novSeg">Seguimiento: ¿qué falta o qué se hizo?</label>
+        <textarea class="form-control" id="novSeg" rows="3"></textarea></div>
+      <div class="col-12 d-flex gap-2"><button class="btn-sigat" type="submit">Guardar</button>
+        <button type="button" class="btn btn-sm btn-outline-dark" id="novCancelar">Cancelar</button></div>
+    </form></dialog>
+
+  <nav class="bottom-nav" id="navInferior" aria-label="Navegación inferior">
+    <a href="#reportar"><i class="bi bi-qr-code-scan"></i><span>Reportar</span></a>
+    <a href="#notas"><i class="bi bi-book"></i><span>Notas</span></a>
+    <a href="#historial"><i class="bi bi-clipboard-check"></i><span>Historial</span></a>
+    <a href="#horario"><i class="bi bi-calendar3"></i><span>Horario</span></a>
+    <a href="#novedades"><i class="bi bi-exclamation-triangle"></i><span>Novedades</span></a>
+    <a href="#matricula"><i class="bi bi-person-plus"></i><span>Matrícula</span></a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app_Co.js"></script>
+</body>
+</html>
