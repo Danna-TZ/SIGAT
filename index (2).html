@@ -14,18 +14,31 @@
     </div>
     <div>
       <strong class="brand">SIGAT</strong>
+      <span class="badge" id="roleBadge">ACCESO DOCENTE</span>
     </div>
   </header>
 
   <main class="main">
+    <!-- Vista 1: selección de rol -->
+    <section class="view" id="viewRoles">
+      <div class="roles-head">
+        <h1 class="roles-title">Bienvenido a SIGAT</h1>
+        <p class="roles-sub">Selecciona cómo quieres ingresar</p>
+      </div>
+      <div class="roles-grid" id="rolesGrid"></div>
+    </section>
+
+    <!-- Vista 2: login del rol elegido -->
+    <section class="view" id="viewLogin" hidden>
     <div class="role-pill" id="rolePill">
-      <span class="role-icon">
+      <span class="role-icon" id="pillIcon">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>
       </span>
+      <span id="roleText">Acceso Docente</span>
     </div>
 
     <section class="card">
-      <div class="card-icon">
+      <div class="card-icon" id="cardIcon">
         <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>
       </div>
       <h1>Iniciar sesión</h1>
@@ -70,6 +83,8 @@
           Volver
         </a>
       </div>
+    </section>
+
     </section>
 
     <p class="legal">© 2026 SIGAT — Uso exclusivo de personal autorizado</p>

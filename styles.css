@@ -198,16 +198,13 @@ input.invalid { border-color: var(--danger); }
 
 /* ---------- Pie de tarjeta ---------- */
 .card-footer {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: flex-start;
   margin-top: 22px; padding-top: 18px;
   font-size: 12.5px;
   border-top: 1px solid #e5e9ef;
 }
 .back { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); text-decoration: none; }
 .back:hover { color: var(--text); }
-.signup { color: var(--muted); }
-.signup a { color: var(--text); font-weight: 700; text-decoration: none; }
-.signup a:hover { text-decoration: underline; }
 
 .legal { font-size: 11.5px; color: rgba(255, 255, 255, .55); text-align: center; }
 
@@ -219,3 +216,43 @@ input.invalid { border-color: var(--danger); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+/* ---------- Selección de rol ---------- */
+.view { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.roles-head { text-align: center; color: #fff; }
+.roles-title { font-size: 26px; font-weight: 700; color: #fff; }
+.roles-sub { margin-top: 6px; font-size: 14.5px; color: rgba(255, 255, 255, .75); }
+
+.roles-grid {
+  width: 100%; max-width: 620px;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+}
+.role-card {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px;
+  text-align: left; font: inherit; color: var(--text);
+  background: #fff;
+  border: 1px solid transparent; border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .18);
+  cursor: pointer;
+  transition: transform .15s, border-color .15s;
+}
+.role-card:hover { transform: translateY(-2px); border-color: var(--bg-bottom); }
+.role-card:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.role-card .rc-icon {
+  flex: none; width: 46px; height: 46px;
+  display: grid; place-items: center;
+  color: var(--navy); background: #f1f5f9;
+  border: 1px solid var(--border); border-radius: 11px;
+}
+.role-card strong { display: block; font-size: 15px; }
+.role-card span { display: block; margin-top: 2px; font-size: 12.5px; color: var(--muted); }
+
+
+@media (max-width: 560px) {
+  .roles-grid { grid-template-columns: 1fr; }
+}
+
+/* El 5.º rol (admin) queda centrado en su propia fila */
+.roles-grid .role-card:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 7px); }
+@media (max-width: 560px) { .roles-grid .role-card:last-child:nth-child(odd) { width: 100%; } }
